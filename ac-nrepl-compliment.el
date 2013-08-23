@@ -67,25 +67,27 @@
 (require 'nrepl)
 (require 'auto-complete)
 
-(defvar ac-nrepl-compliment-complete-core-required nil)
+(defvar ac-nrepl-compliment-core-required ())
 
-(defun ac-nrepl-compliment-require-complete-core ()
-  (setq ac-nrepl-compliment-complete-core-required
-        (if (string= (plist-get
-                      (ac-nrepl-compliment-sync-eval
-                       "(try (require 'compliment.core) (catch Exception e :error))")
-                      :value)
-                     "nil")
-            t :na)))
+(defun ac-nrepl-compliment-require-core ()
+  (let* ((t-session (nrepl-current-tooling-session))
+        (status (cdr (assoc t-session ac-nrepl-compliment-core-required))))
+    (if status
+        status
+      (let ((status
+             (if (string= (plist-get
+                           (ac-nrepl-compliment-sync-eval
+                            "(try (require 'compliment.core) (catch Exception e :error))")
+                           :value)
+                          "nil")
+                 t :na)))
+        (add-to-list 'ac-nrepl-compliment-core-required (cons t-session status))
+        status))))
 
 (defun ac-nrepl-compliment-available-p ()
   "Return t if nrepl is available for completion, otherwise nil."
-  (if (eq ac-nrepl-compliment-complete-core-required t)
-      t
-    (cond ((eq ac-nrepl-compliment-complete-core-required :na) nil)
-          (t (when (condition-case nil (nrepl-current-tooling-session)
-                     (error nil))
-               (ac-nrepl-compliment-require-complete-core))))))
+  (when (eq (ac-nrepl-compliment-require-core) t)
+    t))
 
 (defun ac-nrepl-compliment-sync-eval (clj)
   "Synchronously evaluate CLJ.
@@ -94,9 +96,10 @@ Result is a plist, as returned from `nrepl-send-string-sync'."
 
 (defun ac-nrepl-compliment-candidates* (clj)
   "Return completion candidates produced by evaluating CLJ."
-  (let* ((response (plist-get (ac-nrepl-compliment-sync-eval clj) :value)))
-    (when response
-      (car (read-from-string response)))))
+  (when (eq (ac-nrepl-compliment-require-core) t)
+    (let* ((response (plist-get (ac-nrepl-compliment-sync-eval clj) :value)))
+      (when response
+        (car (read-from-string response))))))
 
 (defvar ac-nrepl-compliment-last-context nil)
 
