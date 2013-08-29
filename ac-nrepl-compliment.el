@@ -121,9 +121,13 @@ point replaced by __prefix__."
              (context (nrepl-expression-at-point))
              (_ (beginning-of-defun))
              (expr-start (point)))
-        (concat (substring context 0 (- pref-start expr-start))
-                "__prefix__"
-                (substring context (- pref-end expr-start)))))))
+        (replace-regexp-in-string
+         "}" ")"
+         (replace-regexp-in-string
+          "{" "(compliment-hashmap "
+          (concat (substring context 0 (- pref-start expr-start))
+                  "__prefix__"
+                  (substring context (- pref-end expr-start)))))))))
 
 (defun ac-nrepl-compliment-get-context ()
   (let ((context (ac-nrepl-compliment-get-context-at-point)))
