@@ -64,7 +64,7 @@
 
 ;;; Code:
 
-(require 'nrepl)
+(require 'cider)
 (require 'auto-complete)
 
 (defvar ac-nrepl-compliment-core-required ())
@@ -92,7 +92,7 @@
 (defun ac-nrepl-compliment-sync-eval (clj)
   "Synchronously evaluate CLJ.
 Result is a plist, as returned from `nrepl-send-string-sync'."
-  (nrepl-send-string-sync clj (nrepl-current-ns) (nrepl-current-tooling-session)))
+  (nrepl-send-string-sync clj (cider-current-ns) (nrepl-current-tooling-session)))
 
 (defun ac-nrepl-compliment-candidates* (clj)
   "Return completion candidates produced by evaluating CLJ."
@@ -118,7 +118,7 @@ point replaced by __prefix__."
     (save-excursion
       (let* ((pref-end (point))
              (pref-start (ac-nrepl-compliment-symbol-start-pos))
-             (context (nrepl-expression-at-point))
+             (context (cider-expression-at-point))
              (_ (beginning-of-defun))
              (expr-start (point)))
         (replace-regexp-in-string
@@ -207,7 +207,7 @@ Caches fetched documentation for the current completion call."
   "Defaults common to the various completion sources.")
 
 ;;;###autoload
-(defvar ac-source-nrepl-everything
+(defvar ac-source-compliment-everything
   (append
    '((candidates . ac-nrepl-compliment-candidates-everything)
      (symbol . "v"))
@@ -219,7 +219,7 @@ Caches fetched documentation for the current completion call."
   "Add the nrepl completion source to the front of `ac-sources'.
 This affects only the current buffer."
   (interactive)
-  (add-to-list 'ac-sources 'ac-source-nrepl-everything))
+  (add-to-list 'ac-sources 'ac-source-compliment-everything))
 
 ;;;###autoload
 (defun ac-nrepl-compliment-popup-doc ()
