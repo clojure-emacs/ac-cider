@@ -118,7 +118,7 @@ point replaced by __prefix__."
     (save-excursion
       (let* ((pref-end (point))
              (pref-start (ac-nrepl-compliment-symbol-start-pos))
-             (context (cider-expression-at-point))
+             (context (cider-defun-at-point))
              (_ (beginning-of-defun))
              (expr-start (point)))
         (replace-regexp-in-string
