@@ -43,10 +43,9 @@
 
 ;;     (load "path/to/ac-nrepl-compliment.el")
 ;;     (require 'ac-nrepl-compliment)
-;;     (add-hook 'nrepl-mode-hook 'ac-nrepl-compliment-setup)
-;;     (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-compliment-setup)
+;;     (add-hook 'cider-mode-hook 'ac-nrepl-compliment-setup)
 ;;     (eval-after-load "auto-complete"
-;;       '(add-to-list 'ac-modes 'nrepl-mode))
+;;       '(add-to-list 'ac-modes 'cider-mode))
 
 ;; If you want to trigger auto-complete using TAB in nrepl buffers, you may
 ;; want to use auto-complete in your `completion-at-point-functions':
@@ -55,8 +54,7 @@
 ;;       (setq completion-at-point-functions '(auto-complete)))
 ;;     (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 ;;
-;;     (add-hook 'nrepl-mode-hook 'set-auto-complete-as-completion-at-point-function)
-;;     (add-hook 'nrepl-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
+;;     (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
 ;;
 ;; You might consider using ac-nrepl-compliment's popup documentation in place of `nrepl-doc':
 ;;
@@ -118,7 +116,7 @@ point replaced by __prefix__."
     (save-excursion
       (let* ((pref-end (point))
              (pref-start (ac-nrepl-compliment-symbol-start-pos))
-             (context (cider-expression-at-point))
+             (context (cider-defun-at-point))
              (_ (beginning-of-defun))
              (expr-start (point)))
         (replace-regexp-in-string
