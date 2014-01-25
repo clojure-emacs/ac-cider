@@ -10,7 +10,7 @@
 ;; URL: https://github.com/alexander-yakushev/ac-nrepl-compliment
 ;; Keywords: languages, clojure, nrepl, compliment
 ;; Version: DEV
-;; Package-Requires: ((nrepl "0.1") (auto-complete "1.4"))
+;; Package-Requires: ((cider "0.5.0") (auto-complete "1.4"))
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
