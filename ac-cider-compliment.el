@@ -41,6 +41,7 @@
 
 ;;     (load "path/to/ac-nrepl-compliment.el")
 ;;     (require 'ac-cider-compliment)
+;;     (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
 ;;     (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
 ;;     (eval-after-load "auto-complete"
 ;;       '(add-to-list 'ac-modes 'cider-repl-mode))
