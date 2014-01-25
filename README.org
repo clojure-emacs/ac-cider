@@ -1,58 +1,50 @@
-* ac-nrepl-compliment
+* ac-cider-compliment
 
-  ac-nrepl-compliment is a completion source for Emacs auto-complete
+  ac-cider-compliment is a completion source for Emacs auto-complete
   package that uses [[https://github.com/alexander-yakushev/compliment][Compliment]] as candidates provider.
 
-  ac-nrepl-compliment started as a fork of [[https://github.com/clojure-emacs/ac-nrepl][ac-nrepl]] which uses
-  [[https://github.com/ninjudd/clojure-complete][clojure-complete]] as backend. Then ac-nrepl-compliment diverged too
+  ac-cider-compliment started as a fork of [[https://github.com/clojure-emacs/ac-nrepl][ac-nrepl]] which uses
+  [[https://github.com/ninjudd/clojure-complete][clojure-complete]] as backend. Then ac-cider-compliment diverged too
   much to remain a fork, so I moved it into a separate project.
 
 ** Installation
 
-   First, ensure =auto-complete= and =nrepl= are installed: I
-   recommend using packages from [[http://marmalade-repo.org][Marmalade]] or [[http://melpa.milkbox.net][Melpa]].
+   ac-cider-compliment is available as a package in [[http://melpa.milkbox.net][Melpa]] repository.
+   You can install it from there like:
 
-   You'll need both =auto-complete= and =nrepl= to be enabled and
-   working, so please consult the corresponding documentation is you
-   have any trouble with this.
+   : M-x package-install ac-cider-compliment
 
-   Next, you have to download ac-nrepl-compliment.el and put it
-   somewhere into your =~/.emacs.d/= folder. Right now installation with
-   package manager is not supported, but it is coming soon.
+   ac-cider-compliment depends on =auto-complete= and =cider= which
+   will be downloaded automatically.
 
-   =ac-nrepl-compliment= provides an nrepl-specific completion source,
-   so =auto-complete= needs to be told to use them when =nrepl-mode=
+   =ac-nrepl-compliment= provides an CIDER-specific completion source,
+   so =auto-complete= needs to be told to use them when =cider-mode=
    is active. To do this, put the following code in your emacs init
    file to
 
    : (load "path/to/ac-nrepl-compliment.el")
-   : (require 'ac-nrepl-compliment)
-   : (add-hook 'nrepl-mode-hook 'ac-nrepl-compliment-setup)
-   : (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-compliment-setup)
+   : (require 'ac-cider-compliment)
+   : (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
+   : (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
    : (eval-after-load "auto-complete"
-   :   '(add-to-list 'ac-modes 'nrepl-mode))
+   :   '(add-to-list 'ac-modes cider-mode))
 
-   If you want to trigger =auto-complete= using TAB in nrepl buffers, you may
+   If you want to trigger =auto-complete= using TAB in CIDER buffers, you may
    want to put =auto-complete= into your =completion-at-point-functions=:
 
    : (defun set-auto-complete-as-completion-at-point-function ()
    :   (setq completion-at-point-functions '(auto-complete)))
    : (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
    :
-   : (add-hook 'nrepl-mode-hook 'set-auto-complete-as-completion-at-point-function)
-   : (add-hook 'nrepl-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
-
-   You might consider using ac-nrepl-compliment's popup documentation in place of =nrepl-doc=:
-
-   : (define-key nrepl-interaction-mode-map (kbd "C-c C-d") 'ac-nrepl-compliment-popup-doc)
+   : (add-hook cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
 ** Usage
 
-   =ac-nrepl-compliment= should now automatically be enabled when you
-   visit a buffer in which =nrepl-mode= is active and =auto-complete=
-   is enabled. (The symbols "nrepl" and "AC" should appear in the
+   =ac-cider-compliment= should now automatically be enabled when you
+   visit a buffer in which =cider-mode= is active and =auto-complete=
+   is enabled. (The symbols "cider" and "AC" should appear in the
    modeline.)
 
    Simply trigger auto-completion, and completion candidates supplied
-   by nrepl should be displayed. After a short delay, popup
+   by Compliment should be displayed. After a short delay, popup
    documentation for the completed symbol should also be displayed.

@@ -44,7 +44,7 @@
 ;;     (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
 ;;     (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
 ;;     (eval-after-load "auto-complete"
-;;       '(add-to-list 'ac-modes 'cider-repl-mode))
+;;       '(add-to-list 'ac-modes 'cider-mode))
 
 ;; If you want to trigger auto-complete using TAB in CIDER buffers, you may
 ;; want to use auto-complete in your `completion-at-point-functions':
