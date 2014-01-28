@@ -36,6 +36,8 @@
 
 ;; Available as a package in melpa.milkbox.net.
 ;; M-x package-install ac-cider-compliment
+;;
+;; Also make sure that Compliment is loaded into your REPL session.
 
 ;;; Usage:
 
