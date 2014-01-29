@@ -9,7 +9,7 @@
 ;;
 ;; URL: https://github.com/alexander-yakushev/ac-cider-compliment
 ;; Keywords: languages, clojure, nrepl, cider, compliment
-;; Version: 0.1.0
+;; Version: 0.1.1
 ;; Package-Requires: ((cider "0.5.0") (auto-complete "1.4"))
 
 ;; This program is free software; you can redistribute it and/or
@@ -66,11 +66,17 @@
 (require 'cider)
 (require 'auto-complete)
 
+(defcustom ac-cider-compliment-use-context t
+  "When true, uses context at point to improve completion
+suggestions."
+  :type 'boolean
+  :group 'ac-cider-compliment)
+
 (defvar ac-cider-compliment-core-required ())
 
 (defun ac-cider-compliment-require-core ()
   (let* ((t-session (nrepl-current-tooling-session))
-        (status (cdr (assoc t-session ac-cider-compliment-core-required))))
+         (status (cdr (assoc t-session ac-cider-compliment-core-required))))
     (if status
         status
       (let ((status
@@ -141,9 +147,15 @@ point replaced by __prefix__."
   (ac-cider-compliment-candidates*
    (concat "(compliment.core/completions \"" ac-prefix "\" "
            (let ((context (ac-cider-compliment-get-context)))
-             (if context
+             (if (and ac-cider-compliment-use-context context)
                  (concat "'" context)
                "nil")) ")")))
+
+(defun ac-cider-compliment-candidates-everything-without-context ()
+  "Return all candidates for a symbol at point."
+  (setq ac-cider-compliment-documentation-cache nil)
+  (ac-cider-compliment-candidates*
+   (concat "(compliment.core/completions \"" ac-prefix "\" nil)")))
 
 (defvar ac-cider-compliment-documentation-cache '())
 
@@ -211,14 +223,30 @@ Caches fetched documentation for the current completion call."
    '((candidates . ac-cider-compliment-candidates-everything)
      (symbol . "v"))
    ac-cider-compliment-source-defaults)
-  "Auto-complete source for nrepl var completion.")
+  "Auto-complete source for CIDER buffers.")
+
+;;;###autoload
+(defvar ac-source-compliment-everything-without-context
+  (append
+   '((candidates . ac-cider-compliment-candidates-everything-without-context)
+     (symbol . "v"))
+   ac-cider-compliment-source-defaults)
+  "Auto-complete source for CIDER REPL buffer.")
 
 ;;;###autoload
 (defun ac-cider-compliment-setup ()
-  "Add the nrepl completion source to the front of `ac-sources'.
+  "Add the Compliment completion source to the front of `ac-sources'.
 This affects only the current buffer."
   (interactive)
   (add-to-list 'ac-sources 'ac-source-compliment-everything))
+
+;;;###autoload
+(defun ac-cider-compliment-repl-setup ()
+  "Add the Compliment completion source to the front of `ac-sources'.
+This affects only the current buffer. This should be used in
+CIDER REPL buffer."
+  (interactive)
+  (add-to-list 'ac-sources 'ac-source-compliment-everything-without-context))
 
 ;;;###autoload
 (defun ac-cider-compliment-popup-doc ()
