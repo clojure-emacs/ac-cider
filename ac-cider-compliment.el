@@ -1,5 +1,4 @@
-;;; ac-cider-compliment.el --- auto-complete sources for Clojure using
-;;; CIDER and compliment
+;;; ac-cider-compliment.el --- Clojure auto-complete sources using CIDER and compliment
 
 ;; Copyright (C) 2012-2014 Alex Yakushev <alex@bytopia.org>
 
