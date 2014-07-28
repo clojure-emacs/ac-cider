@@ -133,6 +133,12 @@ This affects only the current buffer."
   (interactive)
   (add-to-list 'ac-sources 'ac-source-compliment-everything))
 
+;;;###autoload
+(defun ac-cider-compliment-repl-setup ()
+  "Left for backward-compatibility purposes."
+  (interactive)
+  (add-to-list 'ac-sources 'ac-source-compliment-everything))
+
 (provide 'ac-cider-compliment)
 
 ;; Local Variables:
