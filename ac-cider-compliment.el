@@ -60,12 +60,12 @@
 
 (defun ac-cider-compliment-available-p ()
   "Return t if CIDER supports completion, otherwise nil."
-  (functionp 'cider-completion-complete-op-fn))
+  (functionp 'cider-complete))
 
 (defun ac-cider-compliment-candidates-everything ()
   "Return all candidates for a symbol at point."
   (setq ac-cider-compliment-documentation-cache nil)
-  (cider-dispatch-complete-symbol ac-prefix))
+  (cider-complete ac-prefix))
 
 (defvar ac-cider-compliment-documentation-cache '())
 
@@ -112,7 +112,7 @@ Caches fetched documentation for the current completion call."
   '((available . ac-cider-compliment-available-p)
     (candidate-face . ac-cider-compliment-candidate-face)
     (selection-face . ac-cider-compliment-selection-face)
-    (prefix . ac-cider-compliment-symbol-start-pos)
+    (prefix . cider-completion-symbol-start-pos)
     (match . ac-cider-compliment-match-everything)
     (document . ac-cider-compliment-documentation)
     (cache))
@@ -131,6 +131,7 @@ Caches fetched documentation for the current completion call."
   "Add the Compliment completion source to the front of `ac-sources'.
 This affects only the current buffer."
   (interactive)
+  (setq-default ac-use-fuzzy nil)
   (add-to-list 'ac-sources 'ac-source-compliment-everything))
 
 ;;;###autoload
