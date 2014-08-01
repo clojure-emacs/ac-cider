@@ -140,6 +140,16 @@ This affects only the current buffer."
   (interactive)
   (add-to-list 'ac-sources 'ac-source-compliment-everything))
 
+;;;###autoload
+(defun ac-cider-compliment-popup-doc ()
+  "A popup alternative to `nrepl-doc'."
+  (interactive)
+  (popup-tip (ac-cider-compliment-documentation (symbol-name (symbol-at-point)))
+             :point (ac-cider-compliment-symbol-start-pos)
+             :around t
+             :scroll-bar t
+             :margin t))
+
 (provide 'ac-cider-compliment)
 
 ;; Local Variables:
