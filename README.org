@@ -28,7 +28,7 @@
 (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
 (add-hook 'cider-repl-mode-hook 'ac-cider-compliment-repl-setup)
 (eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes cider-mode))
+  '(add-to-list 'ac-modes 'cider-mode))
 #+end_src
 
    If you want to trigger =auto-complete= using TAB in CIDER buffers, you may
