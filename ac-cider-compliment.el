@@ -145,7 +145,7 @@ This affects only the current buffer."
   "A popup alternative to `nrepl-doc'."
   (interactive)
   (popup-tip (ac-cider-compliment-documentation (symbol-name (symbol-at-point)))
-             :point (ac-cider-compliment-symbol-start-pos)
+             :point (cider-completion-symbol-start-pos)
              :around t
              :scroll-bar t
              :margin t))
