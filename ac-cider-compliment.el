@@ -92,6 +92,12 @@ Caches fetched documentation for the current completion call."
                        (cons (substring-no-properties symbol) doc))
           doc)))))
 
+(defun ac-cider-compliment-symbol-start-pos ()
+  "Find the starting position of the symbol at point, unless inside a string."
+  (let ((sap (symbol-at-point)))
+    (when (and sap (not (in-string-p)))
+      (car (bounds-of-thing-at-point 'symbol)))))
+
 (defun ac-cider-compliment-match-everything (prefix candidates)
   candidates)
 
