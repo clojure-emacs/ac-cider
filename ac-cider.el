@@ -1,4 +1,4 @@
-;;; ac-cider-compliment.el --- Clojure auto-complete sources using CIDER and compliment
+;;; ac-cider.el --- Clojure auto-complete sources using CIDER
 
 ;; Copyright (C) 2012-2014 Alex Yakushev <alex@bytopia.org>
 
@@ -6,7 +6,7 @@
 ;;         Steve Purcell <steve@sanityinc.com>
 ;;         Sam Aaron <samaaron@gmail.com>
 ;;
-;; URL: https://github.com/alexander-yakushev/ac-cider-compliment
+;; URL: https://github.com/clojure-emacs/ac-cider
 ;; Keywords: languages, clojure, nrepl, cider, compliment
 ;; Version: 0.2.0
 ;; Package-Requires: ((cider "0.6.0") (auto-complete "1.4"))
@@ -26,21 +26,21 @@
 
 ;;; Commentary:
 
-;; Provides a number of auto-complete sources for Clojure projects
-;; using CIDER and compliment. This is a fork of ac-nrepl project by
-;; Steve Purcell, with the difference that ac-cider-compliment uses
-;; Compliment as a completion provider.
+;; Provides a number of auto-complete sources for Clojure projects using CIDER
+;; and compliment. This is a replacement for now deprecated ac-nrepl project by
+;; Steve Purcell.
 
 ;;; Installation:
 
 ;; Available as a package in melpa.milkbox.net.
-;; M-x package-install ac-cider-compliment
+;; M-x package-install ac-cider
 
 ;;; Usage:
 
-;;     (require 'ac-cider-compliment)
+;;     (require 'ac-cider)
 ;;     (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-;;     (add-hook 'cider-mode-hook 'ac-cider-compliment-setup)
+;;     (add-hook 'cider-mode-hook 'ac-cider-setup)
+;;     (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
 ;;     (eval-after-load "auto-complete"
 ;;       '(add-to-list 'ac-modes 'cider-mode))
 
@@ -58,23 +58,23 @@
 (require 'cider)
 (require 'auto-complete)
 
-(defun ac-cider-compliment-available-p ()
+(defun ac-cider-available-p ()
   "Return t if CIDER supports completion, otherwise nil."
   (functionp 'cider-complete))
 
-(defun ac-cider-compliment-candidates-everything ()
+(defvar ac-cider-documentation-cache '())
+
+(defun ac-cider-candidates-everything ()
   "Return all candidates for a symbol at point."
-  (setq ac-cider-compliment-documentation-cache nil)
+  (setq ac-cider-documentation-cache nil)
   (cider-complete ac-prefix))
 
-(defvar ac-cider-compliment-documentation-cache '())
-
-(defun ac-cider-compliment-documentation (symbol)
+(defun ac-cider-documentation (symbol)
   "Return documentation for the given SYMBOL, if available.
 Caches fetched documentation for the current completion call."
   (when symbol
     (let ((cached-doc (assoc (substring-no-properties symbol)
-                             ac-cider-compliment-documentation-cache)))
+                             ac-cider-documentation-cache)))
       (if cached-doc
           (cdr cached-doc)
         (let* ((doc
@@ -88,73 +88,67 @@ Caches fetched documentation for the current completion call."
                (doc (if (string= "\"\"" doc)
                         "No documentation available."
                       doc)))
-          (add-to-list 'ac-cider-compliment-documentation-cache
+          (add-to-list 'ac-cider-documentation-cache
                        (cons (substring-no-properties symbol) doc))
           doc)))))
 
-(defun ac-cider-compliment-match-everything (prefix candidates)
+(defun ac-cider-match-everything (prefix candidates)
   candidates)
 
 ;;;###autoload
-(defface ac-cider-compliment-candidate-face
+(defface ac-cider-candidate-face
   '((t (:inherit ac-candidate-face)))
   "Face for nrepl candidates."
   :group 'auto-complete)
 
 ;;;###autoload
-(defface ac-cider-compliment-selection-face
+(defface ac-cider-selection-face
   '((t (:inherit ac-selection-face)))
   "Face for the nrepl selected candidate."
   :group 'auto-complete)
 
 ;;;###autoload
-(defconst ac-cider-compliment-source-defaults
-  '((available . ac-cider-compliment-available-p)
-    (candidate-face . ac-cider-compliment-candidate-face)
-    (selection-face . ac-cider-compliment-selection-face)
+(defconst ac-cider-source-defaults
+  '((available . ac-cider-available-p)
+    (candidate-face . ac-cider-candidate-face)
+    (selection-face . ac-cider-selection-face)
     (prefix . cider-completion-symbol-start-pos)
-    (match . ac-cider-compliment-match-everything)
-    (document . ac-cider-compliment-documentation)
+    (match . ac-cider-match-everything)
+    (document . ac-cider-documentation)
     (cache))
   "Defaults common to the various completion sources.")
 
 ;;;###autoload
-(defvar ac-source-compliment-everything
+(defvar ac-source-cider-everything
   (append
-   '((candidates . ac-cider-compliment-candidates-everything)
+   '((candidates . ac-cider-candidates-everything)
      (symbol . "v"))
-   ac-cider-compliment-source-defaults)
+   ac-cider-source-defaults)
   "Auto-complete source for CIDER buffers.")
 
 ;;;###autoload
-(defun ac-cider-compliment-setup ()
-  "Add the Compliment completion source to the front of `ac-sources'.
+(defun ac-cider-setup ()
+  "Add the CIDER completion source to the front of `ac-sources'.
 This affects only the current buffer."
   (interactive)
   (setq-default ac-use-fuzzy nil)
-  (add-to-list 'ac-sources 'ac-source-compliment-everything))
+  (add-to-list 'ac-sources 'ac-source-cider-everything))
 
 ;;;###autoload
-(defun ac-cider-compliment-repl-setup ()
-  "Left for backward-compatibility purposes."
+(defun ac-cider-popup-doc ()
+  "A popup alternative to `cider-doc'."
   (interactive)
-  (add-to-list 'ac-sources 'ac-source-compliment-everything))
-
-;;;###autoload
-(defun ac-cider-compliment-popup-doc ()
-  "A popup alternative to `nrepl-doc'."
-  (interactive)
-  (popup-tip (ac-cider-compliment-documentation (symbol-name (symbol-at-point)))
+  (popup-tip (ac-cider-documentation (symbol-name (symbol-at-point)))
              :point (cider-completion-symbol-start-pos)
              :around t
              :scroll-bar t
              :margin t))
 
-(provide 'ac-cider-compliment)
+(provide 'ac-cider)
 
 ;; Local Variables:
 ;; coding: utf-8
 ;; eval: (checkdoc-minor-mode 1)
 ;; End:
 
-;;; ac-cider-compliment.el ends here
+;;; ac-cider.el ends here
