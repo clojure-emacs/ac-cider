@@ -79,12 +79,14 @@ Caches fetched documentation for the current completion call."
           (cdr cached-doc)
         (let* ((doc
                 (substring-no-properties
-                 (plist-get (nrepl-send-request-sync
-                             (list "op" "complete-doc"
-                                   "session" (nrepl-current-session)
-                                   "ns" nrepl-buffer-ns
-                                   "symbol" symbol))
-                            :value)))
+                 (replace-regexp-in-string
+                  "\r" ""
+                  (plist-get (nrepl-send-request-sync
+                              (list "op" "complete-doc"
+                                    "session" (nrepl-current-session)
+                                    "ns" nrepl-buffer-ns
+                                    "symbol" symbol))
+                             :value))))
                (doc (if (string= "\"\"" doc)
                         "No documentation available."
                       doc)))
