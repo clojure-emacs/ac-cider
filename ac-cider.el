@@ -150,6 +150,7 @@ This affects only the current buffer."
 
 ;; Local Variables:
 ;; coding: utf-8
+;; indent-tabs-mode: nil
 ;; eval: (checkdoc-minor-mode 1)
 ;; End:
 
