@@ -81,7 +81,7 @@ Caches fetched documentation for the current completion call."
                 (substring-no-properties
                  (replace-regexp-in-string
                   "\r" ""
-                  (plist-get (nrepl-send-sync-request
+                  (plist-get (nrepl-send-request-sync
                               (list "op" "complete-doc"
                                     "session" (nrepl-current-session)
                                     "ns" nrepl-buffer-ns
