@@ -40,6 +40,13 @@
 (add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
 #+end_src
 
+   You might consider using ac-cider's popup documentation in place of cider-doc: 
+
+#+begin_src el
+(eval-after-load "cider"
+  '(define-key cider-mode-map (kbd "C-c C-d") 'ac-cider-popup-doc))
+#+end_src    
+
 ** Usage
 
    =ac-cider= should now automatically be enabled when you visit a buffer in
@@ -49,3 +56,4 @@
    Simply trigger auto-completion, and completion candidates supplied by CIDER
    should be displayed. After a short delay, popup documentation for the
    completed symbol should also be displayed.
+      
