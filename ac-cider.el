@@ -94,9 +94,6 @@ Caches fetched documentation for the current completion call."
                        (cons (substring-no-properties symbol) doc))
           doc)))))
 
-(defun ac-cider-match-everything (prefix candidates)
-  candidates)
-
 ;;;###autoload
 (defface ac-cider-candidate-face
   '((t (:inherit ac-candidate-face)))
@@ -115,7 +112,6 @@ Caches fetched documentation for the current completion call."
     (candidate-face . ac-cider-candidate-face)
     (selection-face . ac-cider-selection-face)
     (prefix . cider-completion-symbol-start-pos)
-    (match . ac-cider-match-everything)
     (document . ac-cider-documentation)
     (cache))
   "Defaults common to the various completion sources.")
