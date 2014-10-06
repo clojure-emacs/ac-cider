@@ -9,7 +9,7 @@
 ;; URL: https://github.com/clojure-emacs/ac-cider
 ;; Keywords: languages, clojure, nrepl, cider, compliment
 ;; Version: 0.2.0
-;; Package-Requires: ((cider "0.8.0") (auto-complete "1.4"))
+;; Package-Requires: ((cider "0.8.0") (auto-complete "1.4") (cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@
 
 (require 'cider)
 (require 'auto-complete)
+(require 'cl-lib)
 
 (defun ac-cider-available-p ()
   "Return t if CIDER supports completion, otherwise nil."
@@ -94,8 +95,52 @@ Caches fetched documentation for the current completion call."
                        (cons (substring-no-properties symbol) doc))
           doc)))))
 
-(defun ac-cider-match-everything (prefix candidates)
-  candidates)
+(defun ac-cider--is-separator (c)
+  (or (= c 45) (= c 46)))
+
+(defun ac-cider--is-capital (c)
+  (and (<= 65 c) (<= c 90)))
+
+(defun ac-cider-fuzzy-matches-p (prefix candidate)
+  "Return t if PREFIX and CANDIDATE are matched."
+  (let ((pre (string-to-list prefix))
+        (cand (string-to-list candidate))
+        (camelcase nil))
+    (when (= (car pre) 46)
+      (setq camelcase t)
+      (setq pre (cdr pre))
+      (setq cand (cdr cand)))
+    (if (string-prefix-p prefix candidate)
+        t
+      (let ((result :not-yet) (skipping nil))
+        (when (= (car pre) (car cand))
+          (while (eq result :not-yet)
+            (cond ((not pre) (setq result t))
+                  ((not cand) (setq result nil))
+                  (skipping (if camelcase
+                                (if (ac-cider--is-capital (car cand))
+                                    (setq skipping nil)
+                                  (setq cand (cdr cand)))
+                              (if (ac-cider--is-separator (car cand))
+                                  (progn
+                                    (when (ac-cider--is-separator (car pre))
+                                      (setq pre (cdr pre)))
+                                    (setq cand (cdr cand))
+                                    (setq skipping nil))
+                                (setq cand (cdr cand)))))
+                  ((= (car pre) (car cand)) (progn (setq pre (cdr pre))
+                                                   (setq cand (cdr cand))))
+                  (t (progn (setq skipping
+                                  (or camelcase
+                                      (not (ac-cider--is-separator (car cand)))))
+                            (setq cand (cdr cand))))))
+          result)))))
+
+(defun ac-cider-match-fuzzy (prefix candidates)
+  "Returns candidates that match fuzzily with the prefix."
+  (cl-remove-if-not (lambda (cand)
+                      (ac-cider-fuzzy-matches-p prefix cand))
+                    candidates))
 
 ;;;###autoload
 (defface ac-cider-candidate-face
@@ -115,7 +160,7 @@ Caches fetched documentation for the current completion call."
     (candidate-face . ac-cider-candidate-face)
     (selection-face . ac-cider-selection-face)
     (prefix . cider-completion-symbol-start-pos)
-    (match . ac-cider-match-everything)
+    (match . ac-cider-match-fuzzy)
     (document . ac-cider-documentation)
     (cache))
   "Defaults common to the various completion sources.")
