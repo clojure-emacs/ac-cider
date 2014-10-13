@@ -44,8 +44,9 @@
 ;;     (eval-after-load "auto-complete"
 ;;       '(add-to-list 'ac-modes 'cider-mode))
 
-;; If you want to trigger auto-complete using TAB in CIDER buffers, you may
-;; want to use auto-complete in your `completion-at-point-functions':
+;; If you want to trigger auto-complete using TAB in CIDER buffers, add this to
+;; your configuration file, but note that it is incompatible with (setq
+;; tab-always-indent 'complete):
 
 ;;     (defun set-auto-complete-as-completion-at-point-function ()
 ;;       (setq completion-at-point-functions '(auto-complete)))

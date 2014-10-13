@@ -29,8 +29,9 @@
   '(add-to-list 'ac-modes 'cider-mode))
 #+end_src
 
-   If you want to trigger =auto-complete= using TAB in CIDER buffers, you may
-   want to put =auto-complete= into your =completion-at-point-functions=:
+   If you want to trigger auto-complete using TAB in CIDER buffers, add this to
+   your configuration file (but note that it is incompatible with =(setq
+   tab-always-indent 'complete)=):
 
 #+begin_src el
 (defun set-auto-complete-as-completion-at-point-function ()
