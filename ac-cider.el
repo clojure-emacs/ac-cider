@@ -32,7 +32,7 @@
 
 ;;; Installation:
 
-;; Available as a package in melpa.milkbox.net.
+;; Available as a package in melpa.org.
 ;; M-x package-install ac-cider
 
 ;;; Usage:

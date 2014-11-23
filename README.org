@@ -8,7 +8,7 @@
 
 ** Installation
 
-   ac-cider is available as a package in [[http://melpa.milkbox.net][Melpa]] repository. You can install it
+   ac-cider is available as a package in [[http://melpa.org][MELPA]] repository. You can install it
    from there like:
 
    : M-x package-install ac-cider
