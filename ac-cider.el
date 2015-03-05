@@ -113,7 +113,7 @@ Caches fetched documentation for the current completion call."
       (setq camelcase t)
       (setq pre (cdr pre))
       (setq cand (cdr cand)))
-    (if (string-prefix-p prefix candidate)
+    (if (string-match-p (regexp-quote prefix) candidate)
         t
       (let ((result :not-yet) (skipping nil))
         (when (= (car pre) (car cand))
