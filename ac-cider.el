@@ -1,6 +1,6 @@
 ;;; ac-cider.el --- Clojure auto-complete sources using CIDER
 
-;; Copyright (C) 2012-2014 Alex Yakushev <alex@bytopia.org>
+;; Copyright (C) 2012-2015 Alex Yakushev <alex@bytopia.org>
 
 ;; Author: Alex Yakushev <alex@bytopia.org>
 ;;         Steve Purcell <steve@sanityinc.com>
@@ -8,7 +8,7 @@
 ;;
 ;; URL: https://github.com/clojure-emacs/ac-cider
 ;; Keywords: languages, clojure, nrepl, cider, compliment
-;; Version: 0.2.1
+;; Version: 0.2.2
 ;; Package-Requires: ((cider "0.8.0") (auto-complete "1.4") (cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or
