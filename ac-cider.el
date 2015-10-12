@@ -85,7 +85,7 @@ Caches fetched documentation for the current completion call."
                 (substring-no-properties
                  (replace-regexp-in-string
                   "\r" ""
-                  (nrepl-dict-get (nrepl-send-sync-request
+                  (nrepl-dict-get (cider-nrepl-send-sync-request
                                    (list "op" "complete-doc"
                                          "session" (nrepl-current-session)
                                          "ns" (cider-current-ns)
