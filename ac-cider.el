@@ -87,7 +87,7 @@ Caches fetched documentation for the current completion call."
                   "\r" ""
                   (nrepl-dict-get (cider-nrepl-send-sync-request
                                    (list "op" "complete-doc"
-                                         "session" (nrepl-current-session)
+                                         "session" (cider-current-session)
                                          "ns" (cider-current-ns)
                                          "symbol" symbol))
                                   "completion-doc"))))
