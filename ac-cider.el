@@ -8,7 +8,7 @@
 ;;
 ;; URL: https://github.com/clojure-emacs/ac-cider
 ;; Keywords: languages, clojure, nrepl, cider, compliment
-;; Version: 0.2.2
+;; Version: 0.2.3
 ;; Package-Requires: ((cider "0.8.0") (auto-complete "1.4") (cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or
