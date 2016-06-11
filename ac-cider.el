@@ -71,7 +71,8 @@
 (defun ac-cider-candidates-everything ()
   "Return all candidates for a symbol at point."
   (setq ac-cider-documentation-cache nil)
-  (cider-complete ac-prefix))
+  (when (cider-connected-p)
+    (cider-complete ac-prefix)))
 
 (defun ac-cider-documentation (symbol)
   "Return documentation for the given SYMBOL, if available.
