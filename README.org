@@ -3,7 +3,7 @@
   ac-cider is a completion source for Emacs auto-complete package that uses
   [[https://github.com/clojure-emacs/cider][CIDER]] (and [[https://github.com/alexander-yakushev/compliment][Compliment]]) as candidates provider.
 
-  ac-cider's goal is to eventually replace now deprecated [[https://github.com/clojure-emacs/ac-nrepl][ac-nrepl]] which uses
+  ac-cider is the successor of the now deprecated [[https://github.com/clojure-emacs/ac-nrepl][ac-nrepl]] which uses
   [[https://github.com/ninjudd/clojure-complete][clojure-complete]] as backend.
 
 ** Installation
