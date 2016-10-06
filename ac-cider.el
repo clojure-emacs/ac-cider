@@ -1,6 +1,6 @@
 ;;; ac-cider.el --- Clojure auto-complete sources using CIDER
 
-;; Copyright (C) 2012-2015 Alex Yakushev <alex@bytopia.org>
+;; Copyright (C) 2012-2016 Alex Yakushev <alex@bytopia.org>
 
 ;; Author: Alex Yakushev <alex@bytopia.org>
 ;;         Steve Purcell <steve@sanityinc.com>
